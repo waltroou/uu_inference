@@ -32,7 +32,7 @@ For Problems 4-6, assume independent random samples from the two groups and inde
    $$
    \bar{X}=11.5,\qquad s=3,\qquad n=36.
    $$
-   Is 12 a plausible value for the population mean? Construct a 95% confidence interval and compute the two-sided p-value for $H_0:\mu=12$ versus $H_1:\mu\ne12$. Assess plausibility using the interval and the test at $\alpha=.05$.
+   Is 12 a plausible value for the population mean? Construct a 95% confidence interval for $H_0:\mu=12$ versus $H_1:\mu\ne12$. Do you reject or fail to reject the null?
 
 4. A real estate analyst compares the average price of a house in two neighborhoods.
     Group A:
@@ -68,25 +68,53 @@ For Problems 4-6, assume independent random samples from the two groups and inde
     $$
     \bar{X}_B=2.8,\qquad s_B=1.4,\qquad n_B=64.
     $$
-    Is the difference statistically large relative to the noise? Compute the test statistic and two-sided p-value for $H_0:\mu_A-\mu_B=0$, and interpret the result at $\alpha=.05$.
+    Is the difference statistically large relative to the noise? Compute the test statistic and confidence interval for $H_0:\mu_A-\mu_B=0$, and interpret the result at $\alpha=.05$.
 
-For the following data and scenarios (7-11):
+7. In `./data/ames_prices.csv`, create an indicator that equals 1 when `Central.Air == 'Y'` and 0 otherwise.
+   
+   a. Estimate the proportion of homes with central air.
+   
+   b. Using a reproducible random-number seed, generate at least 2,000 bootstrap estimates of this proportion. Report the seed and number of bootstrap replications.
+   
+   c. Compute the bootstrap standard error as the sample standard deviation of the bootstrap estimates (using `ddof=1` ensures that there's the $1/(N-1)$ degrees of freedom correction).
+   
+   d. Using the original estimate and the bootstrap standard error, construct Normal 90%, 95%, and 99% confidence intervals.
+   
+   e. Use each confidence interval to evaluate $H_0:p=.90$. At the matching significance levels $\alpha=.10,.05,.01$, state whether you reject or fail to reject the null hypothesis. Briefly interpret your results.
 
-   - a. Generate at least $R=2{,}000$ nonparametric bootstrap estimates with a reproducible RNG. Report the seed and $R$. For two groups, resample independently within groups; for correlation, resample paired rows.
-   - b. Estimate the standard error $\widehat{SE}(\hat\theta)$ with the sample standard deviation of the bootstrap estimates (using denominator $R-1$, or `ddof=1`).
-   - c. Construct centered-Normal 90%, 95%, and 99% CIs: $\hat\theta \pm z^*\widehat{SE}(\hat\theta)$.
-   - d. Test the stated null using $z=(\hat\theta-\theta_0)/\widehat{SE}(\hat\theta)$ and $p=2\Phi(-|z|)$. Decide at $\alpha=.10,.05,.01$.
-   - e. Confirm that every test decision agrees with whether the matching CI contains $\theta_0$.
-   - f. Interpret the estimate, interval, and test in context. These are observational data: do not turn association into causation.
+8. In `./data/ames_prices.csv`, estimate the Pearson correlation between `np.arcsinh(area)` and `np.arcsinh(price)`.
+   
+   a. Using a reproducible random-number seed, generate at least 2,000 bootstrap estimates of the correlation by resampling paired rows. Report the seed and number of bootstrap replications.
+   
+   b. Compute the bootstrap standard error as the sample standard deviation of the bootstrap estimates (using `ddof=1` ensures that there's the $1/(N-1)$ degrees of freedom correction).
+   
+   c. Using the original estimate and the bootstrap standard error, construct centered-Normal 90%, 95%, and 99% confidence intervals.
+   
+   d. Use each confidence interval to evaluate $H_0:\rho=0$. At the matching significance levels $\alpha=.10,.05,.01$, state whether you reject or fail to reject the null hypothesis. Briefly interpret the association without making a causal claim.
+   
+   e. Briefly explain why `area` and `price` must remain paired during resampling.
 
-Use unrounded estimates and standard errors when computing intervals and tests. If a p-value is close to a decision threshold, increase $R$ (for example, to $100{,}000$, using batches if needed) to reduce Monte Carlo error. Small seed-dependent differences in results or borderline test decisions are acceptable when the procedure is correct and reproducible and you discuss the remaining simulation uncertainty. In particular, Problem 10 may be close to the 5% threshold.
+9. In `./data/metabric.csv`, use `Overall Survival (Months)` to estimate the mean recorded time to death or last follow-up. Include both living and deceased patients.
+   
+   a. Using a reproducible random-number seed, generate at least 2,000 bootstrap estimates of the mean. Report the seed and number of bootstrap replications.
+   
+   b. Compute the bootstrap standard error as the sample standard deviation of the bootstrap estimates (using `ddof=1` ensures that there's the $1/(N-1)$ degrees of freedom correction).
+   
+   c. Using the original estimate and the bootstrap standard error, construct centered-Normal 90%, 95%, and 99% confidence intervals.
+   
+   d. Use each confidence interval to evaluate $H_0:\mu=120$ months. At the matching significance levels $\alpha=.10,.05,.01$, state whether you reject or fail to reject the null hypothesis.
+   
+   e. Interpret the estimate and confidence intervals in both months and years. Because living patients' eventual death times are right-censored, explain why these results do not estimate unrestricted mean lifetime.
 
-7. For `./data/ames_prices.csv`, define an indicator equal to 1 when `Central.Air == 'Y'`. Estimate the proportion of homes with central air and test $H_0:p=.90$. Treat a proportion as the mean of a binary variable and complete the full inference routine.
 
-8. For `./data/ames_prices.csv`, estimate the Pearson correlation between `arcsinh(area)` and `arcsinh(price)`. Bootstrap paired rows, construct all three CIs, and test $H_0:\rho=0$. Explain what would go wrong if area and price were resampled separately.
-
-9. For `./data/metabric.csv`, use `Overall Survival (Months)` to estimate the mean recorded time to death or last follow-up, including both living and deceased patients. Let $\mu$ denote the population mean of this recorded-time variable, and test $H_0:\mu=120$ months. Complete the full inference routine and interpret the CIs in both months and years. Living patients' eventual death times are right-censored, so this exercise does not estimate unrestricted mean lifetime. Explain that distinction in your interpretation.
-
-10. For `./data/metabric.csv`, create `deceased = 1` when `Overall Survival Status == '1:DECEASED'`. Estimate the difference in deceased proportions between `Chemotherapy == 'YES'` and `'NO'`: YES minus NO. Test $H_0:\Delta=0$. State at least two plausible confounders visible in the dataset.
-
-11. For `./data/nhanes_data_17_18.csv`, use `AgeInYearsAtScreening` to select respondents aged 18 or older with observed `SleepHoursWeekdaysOrWorkdays`. Estimate mean weekday sleep and test $H_0:\mu=8$ hours. Comment on whether statistical and practical significance tell the same story. For this exercise, treat observations as independent and unweighted, ignoring the complex survey design. Do not interpret these results as nationally representative population estimates or survey-adjusted confidence intervals.
+10. In `./data/nhanes_data_17_18.csv`, select respondents who are at least 18 years old and have an observed value for `SleepHoursWeekdaysOrWorkdays`. Estimate their mean weekday sleep.
+   
+   a. Using a reproducible random-number seed, generate at least 2,000 bootstrap estimates of the mean. Report the seed and number of bootstrap replications.
+   
+   b. Compute the bootstrap standard error as the sample standard deviation of the bootstrap estimates (`ddof=1`).
+   
+   c. Using the original estimate and the bootstrap standard error, construct centered-Normal 90%, 95%, and 99% confidence intervals.
+   
+   d. Use each confidence interval to evaluate $H_0:\mu=8$ hours. At the matching significance levels $\alpha=.10,.05,.01$, state whether you reject or fail to reject the null hypothesis.
+   
+   e. Interpret the result and discuss whether its statistical and practical significance tell the same story. For this exercise, treat observations as independent and unweighted. Because the complex survey design is ignored, do not describe the result as nationally representative or the intervals as survey-adjusted.
